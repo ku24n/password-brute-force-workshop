@@ -1,33 +1,41 @@
-# Password Brute-Force Workshop
+# Brute-Force Workshop 🤩
 
-A small lab for beginners: build a bot that cracks a weak login, then add
-defenses and watch it fail.
-
-**Rule:** only attack your own target, on your own machine or Codespace.
+## **RULE!!!** only attack your own target, on your own machine or Codespace!!!
 
 ## Files
-- `app.py` - the login server (target)
-- `bot.py` - the brute-force bot (attacker)
+- `app.py` — the login server (target)
+- `bot.py` — the brute-force bot (attacker)
 
 ## Setup (Codespaces)
-1. **Code -> Codespaces -> Create codespace**
+1. **Code → Codespaces → Create codespace**
 2. `pip install -r requirements.txt`
 
 ## Run
-Terminal 1:
-```
-python app.py
-```
-Terminal 2:
-```
-python bot.py
-```
+Terminal 1: python app.py
+Terminal 2: python bot.py
+
 The bot cracks the password in under a minute.
 
-## Add a defense, re-run the bot, watch it fail
-1. **Longer password** - in `app.py`, change `3` to `12`. Search space explodes.
-2. **Rate limiting** - add a delay or lockout in `/login`. The bot crawls.
-3. **Lockout / CAPTCHA** - how real sites block automation.
+## How to stop the bot from hacking you???
+1. **Longer password** — in `app.py`, change `3` to `12`. Search space explodes.
+2. **Rate limiting** — in `app.py`, add these lines at the top:
 
-## Going further
-TryHackMe - PicoCTF - OverTheWire Bandit - OWASP Top 10
+```
+import time
+fails = 0
+```
+then, swap the login functions to this:
+
+```
+@app.route("/login", methods=["POST"])
+def login():
+    global fails
+    guess = request.form.get("password", "")
+    if guess == PASSWORD:
+        return "FLAG{you_got_in}", 200
+    fails += 1
+    if fails > 5:
+        time.sleep(2)   # after 5 wrong guesses, slow every attempt down
+    return "Wrong password", 403
+```
+Real sites use CAPTCHA to block these kinds of automated attacks.
