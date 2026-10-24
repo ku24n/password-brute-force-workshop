@@ -20,8 +20,8 @@ import requests
 URL = "http://localhost:5000/login"
 
 # Must match the character set the target uses.
-ALPHABET = string.ascii_lowercase + string.digits
-MAX_LENGTH = 4
+ALPHABET = string.ascii_lowercase
+MAX_LENGTH = 3
 
 
 def total_combinations():

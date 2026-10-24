@@ -9,43 +9,32 @@ Run it:
     pip install -r requirements.txt
     python app.py
 
-Then open http://localhost:5000 in a browser, or point bot.py at it.
+Then point bot.py at it.
 """
 
 from flask import Flask, request
+import logging
 import secrets
 import string
 
 app = Flask(__name__)
 
-# A "randomly generated" password. We keep it SHORT (4 characters,
-# lowercase letters + digits) on purpose so the brute force actually
-# finishes during the workshop. In the real world this is exactly the
-# kind of password that makes a site crackable -- that's the lesson.
-ALPHABET = string.ascii_lowercase + string.digits
-PASSWORD = "".join(secrets.choice(ALPHABET) for _ in range(4))
+# Silence Werkzeug's per-request logging. Without this the server prints
+# a line for every single guess -- thousands of them -- which floods the
+# terminal and actually slows the whole demo down.
+logging.getLogger("werkzeug").setLevel(logging.ERROR)
+
+# A "randomly generated" password. We keep it SHORT (3 lowercase letters)
+# on purpose so the brute force actually finishes during the workshop. In
+# the real world this is exactly the kind of password that makes a site
+# crackable -- that's the lesson.
+ALPHABET = string.ascii_lowercase
+PASSWORD = "".join(secrets.choice(ALPHABET) for _ in range(3))
 
 # Printed to the instructor's console so you can verify the crack worked.
 print("=" * 40)
 print(f"Target password for this run: {PASSWORD}")
 print("=" * 40)
-
-
-PAGE = """
-<!doctype html>
-<title>Workshop Login</title>
-<h1>Secret Area</h1>
-<form method="post" action="/login">
-  <input name="password" placeholder="password" autofocus>
-  <button type="submit">Log in</button>
-</form>
-<p>{message}</p>
-"""
-
-
-@app.route("/")
-def home():
-    return PAGE.format(message="")
 
 
 @app.route("/login", methods=["POST"])

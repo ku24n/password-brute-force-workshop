@@ -40,17 +40,17 @@ verify the crack. Students don't need to look at it.
 ```
 python bot.py
 ```
-Watch it grind through the search space and recover the password.
-
-You can also open the login in a browser at <http://localhost:5000>.
+Watch it grind through the search space and recover the password. With a
+3-lowercase-letter password this takes roughly half a minute.
 
 ## The real lesson: break your bot on purpose
 
 After it works, make the login uncrackable and re-run the bot:
 
 1. **Longer password + bigger character set.** In `app.py`, change the
-   length from `4` to `12` and add `string.ascii_uppercase + string.punctuation`
-   to `ALPHABET`. Recompute the search space in `bot.py` — it's now infeasible.
+   length from `3` to `12` and set `ALPHABET` to
+   `string.ascii_letters + string.digits + string.punctuation`.
+   Recompute the search space in `bot.py` — it's now infeasible.
 2. **Rate limiting.** Add a small `time.sleep()` or a lockout after N failed
    attempts in `/login`. The bot slows to a crawl.
 3. **Account lockout / CAPTCHA.** Discuss how real sites block automation.
