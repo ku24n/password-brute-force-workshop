@@ -46,7 +46,7 @@ def login():
 
 
 if __name__ == "__main__":
-    # host="0.0.0.0" lets other laptops on the SAME local network reach it.
-    # Use host="127.0.0.1" instead if you want it reachable only from this
-    # machine. In a Codespace, leave it as is and attack http://localhost:5000.
-    app.run(host="0.0.0.0", port=5000)
+    # 127.0.0.1 means this server is reachable ONLY from this machine, so a
+    # classmate on the same Wi-Fi can't hit anyone else's target. The bot
+    # attacks http://localhost:5000, which stays on this machine.
+    app.run(host="127.0.0.1", port=5000)
